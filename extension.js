@@ -1,6 +1,7 @@
 
 const vscode = require('vscode');
 
+var options = { month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', year:'numeric', hour12: false , second:'numeric' };
 
 /**
  * @param {vscode.ExtensionContext} context 
@@ -42,7 +43,7 @@ function activate(context) {
 				if(y.length>13||y.length===11)
 				return null;
 				var nm=Number(y);
-				var fl=" (millisec)";
+				var fl=" (ms)";
 				if(y.length<11)
 				{
 					fl=" (sec)";
@@ -132,7 +133,7 @@ function activate(context) {
 									nm=Number(chck);
 									if(chck.length>10)
 									{
-										fl=" (millisec)";
+										fl=" ms";
 									}
 									else
 									{
@@ -145,10 +146,12 @@ function activate(context) {
 										continue;
 									}
 									ans=new Date(nm);
-									var cont=ans.toString();
-									if(!vscode.workspace.getConfiguration('epoch-converter').get('setTimezone'))
-										cont=ans.toUTCString();
-									var dec={renderOptions:{after:{backgroundColor: 'blue', color:'white', contentText: " "+cont+fl, fontWeight: 'normal',
+									var cont=ans.toLocaleString('en-US', options);
+									if(!vscode.workspace.getConfiguration('epoch-converter').get('setTimezone')) {
+										// cont=ans.toUTCString();
+										cont=ans.toLocaleString('en-US', options);
+									}
+									var dec={renderOptions:{after:{backgroundColor: 'black', color:'pink', contentText: " "+cont+fl, fontWeight: 'normal',
 									fontStyle: 'normal'}}, range:wrdRnge};
 									decorationsArray.push(dec);
 									
